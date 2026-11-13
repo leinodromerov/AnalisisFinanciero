@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario - Metodología 3S Advisor</title>
+    <!-- Tailwind CSS para un diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Encabezado -->
+    <header class="bg-indigo-900 text-white py-6 shadow-md">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-wide">Metodología 3S Advisor</h1>
+            <p class="text-indigo-200 text-sm mt-1">Evaluación diagnóstica y estructuración estratégica</p>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-2xl w-full mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Tarjeta del Cuestionario -->
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
+            
+            <!-- Barra de Progreso -->
+            <div class="mb-6">
+                <div class="flex justify-between text-xs font-semibold text-slate-500 mb-2">
+                    <span id="progress-text">Pregunta 1 de 4</span>
+                    <span id="progress-percent">25%</span>
+                </div>
+                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <!-- Pregunta Activa -->
+            <div id="question-box">
+                <h2 id="question-title" class="text-lg md:text-xl font-bold text-slate-900 mb-4">Cargando pregunta...</h2>
+                <div id="options-container" class="space-y-3">
+                    <!-- Las opciones se inyectarán dinámicamente mediante JavaScript -->
+                </div>
+            </div>
+
+            <!-- Botones de Navegación -->
+            <div class="mt-8 flex justify-between items-center pt-4 border-t border-slate-100">
+                <button id="prev-btn" onclick="prevQuestion()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition hidden">
+                    Anterior
+                </button>
+                <div class="ml-auto">
+                    <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 shadow-md shadow-indigo-200 transition">
+                        Siguiente
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Contenedor de Resultados (Oculto inicialmente) -->
+        <div id="result-container" class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100 hidden text-center">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+                ✓
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">¡Evaluación Completada!</h2>
+            <p class="text-slate-600 mb-6">Has finalizado satisfactoriamente el test de la Metodología 3S Advisor.</p>
+            
+            <div class="bg-slate-50 p-4 rounded-xl text-left mb-6 border border-slate-200">
+                <h3 class="font-semibold text-slate-800 mb-2">Resumen de tus respuestas:</h3>
+                <ul id="summary-list" class="space-y-2 text-sm text-slate-600">
+                    <!-- El resumen de selecciones aparecerá aquí -->
+                </ul>
+            </div>
+
+            <button onclick="restartQuiz()" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 shadow-md shadow-indigo-200 transition">
+                Reiniciar Cuestionario
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        <p>© 2026 Metodología 3S Advisor • Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Lógica en JavaScript -->
+    <script>
+        // Banco de preguntas editable de la Metodología 3S
+        const questions = [
+            {
+                title: "1. ¿Cuál es el enfoque principal de su estrategia actual en infraestructura o servicios?",
+                options: [
+                    "Optimización de costos y eficiencia operativa.",
+                    "Migración y escalabilidad en entornos Cloud/Datacenter.",
+                    "Seguridad de la información y cumplimiento normativo.",
+                    "Transformación digital integral y nuevos modelos de negocio."
+                ]
+            },
+            {
+                title: "2. ¿Cómo califica el nivel de madurez tecnológica actual en su organización?",
+                options: [
+                    "Básico: Procesos manuales o sistemas heredados aislados.",
+                    "En evolución: Infraestructura mixta (Híbrida) con adopción parcial.",
+                    "Avanzado: Alta automatización, procesos estandarizados y monitoreo continuo.",
+                    "Líder: Innovación constante basada en datos y arquitecturas robustas."
+                ]
+            },
+            {
+                title: "3. ¿Cuál es su principal cuello de botella o desafío al implementar proyectos?",
+                options: [
+                    "Restricciones presupuestales y asignación de recursos.",
+                    "Resistencia al cambio del personal o falta de capacitación.",
+                    "Complejidad técnica en la integración de sistemas.",
+                    "Falta de una metodología clara de seguimiento y métricas (KPIs)."
+                ]
+            },
+            {
+                title: "4. ¿Qué nivel de prioridad representa la seguridad digital y continuidad del negocio?",
+                options: [
+                    "Bajo: Se atienden incidentes puntuales a medida que ocurren.",
+                    "Medio: Se cuenta con respaldos básicos y antivirus.",
+                    "Alto: Políticas de seguridad definidas y respaldos automatizados.",
+                    "Crítico: Arquitectura tolerante a fallos, planes de recuperación ante desastres (DRP) y ciberseguridad proactiva."
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+
+        const questionTitle = document.getElementById("question-title");
+        const optionsContainer = document.getElementById("options-container");
+        const progressText = document.getElementById("progress-text");
+        const progressPercent = document.getElementById("progress-percent");
+        const progressBar = document.getElementById("progress-bar");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultContainer = document.getElementById("result-container");
+        const summaryList = document.getElementById("summary-list");
+
+        function loadQuestion() {
+            const currentQ = questions[currentQuestionIndex];
+            questionTitle.textContent = currentQ.title;
+            optionsContainer.innerHTML = "";
+
+            currentQ.options.forEach((option, index) => {
+                const isChecked = userAnswers[currentQuestionIndex] === index ? "checked" : "";
+                const borderClass = isChecked ? "border-indigo-600 bg-indigo-50/50" : "border-slate-200 hover:bg-slate-50";
+
+                const label = document.createElement("label");
+                label.className = `flex items-center p-4 rounded-xl border ${borderClass} cursor-pointer transition-all duration-200`;
+                label.innerHTML = `
+                    <input type="radio" name="option" value="${index}" ${isChecked} class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="ml-3 text-slate-700 font-medium text-sm md:text-base">${option}</span>
+                `;
+                
+                label.querySelector("input").addEventListener("change", () => {
+                    userAnswers[currentQuestionIndex] = index;
+                    loadQuestion(); // Recargar para actualizar estilos visuales
+                });
+
+                optionsContainer.appendChild(label);
+            });
+
+            // Actualizar barra de progreso
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+            progressBar.style.width = `${progress}%`;
+
+            // Mostrar u ocultar botón anterior
+            if (currentQuestionIndex > 0) {
+                prevBtn.classList.remove("hidden");
+            } else {
+                prevBtn.classList.add("hidden");
+            }
+
+            // Cambiar texto del botón siguiente si es la última pregunta
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = "Finalizar";
+            } else {
+                nextBtn.textContent = "Siguiente";
+            }
+        }
+
+        function nextQuestion() {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert("Por favor, selecciona una opción antes de continuar.");
+                return;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            quizContainer.classList.add("hidden");
+            resultContainer.classList.remove("hidden");
+
+            summaryList.innerHTML = "";
+            questions.forEach((q, index) => {
+                const selectedOptionIndex = userAnswers[index];
+                const selectedText = selectedOptionIndex !== undefined ? q.options[selectedOptionIndex] : "No respondida";
+                
+                const li = document.createElement("li");
+                li.innerHTML = `<strong class="text-slate-700">P${index + 1}:</strong> ${selectedText}`;
+                summaryList.appendChild(li);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            resultContainer.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // Inicializar el cuestionario al cargar la página
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>

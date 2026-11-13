@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f7fb" />
+  <title>Cuestionario 3S | Autoconocimiento</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #20243a;
+      --muted: #737991;
+      --paper: #fff;
+      --background: #f6f7fb;
+      --line: #e7e9f1;
+      --primary: #6258d9;
+      --primary-dark: #4e45bd;
+      --primary-soft: #efedff;
+      --green: #2c9b78;
+      --shadow: 0 20px 60px rgba(39, 43, 76, .09);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 12% 0%, rgba(116, 105, 231, .10), transparent 35rem),
+        var(--background);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input { font: inherit; }
+
+    button:focus-visible, input:focus-visible, .scale-option:focus-within {
+      outline: 3px solid rgba(98, 88, 217, .35);
+      outline-offset: 3px;
+    }
+
+    .shell {
+      width: min(100% - 32px, 760px);
+      margin: 0 auto;
+      padding: 38px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .95rem;
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+    }
+
+    .top-note {
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid rgba(231, 233, 241, .9);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .card-content { padding: clamp(24px, 6vw, 48px); }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--primary);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 590px;
+      margin-bottom: 14px;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1.08;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      margin-bottom: 9px;
+      font-size: clamp(1.55rem, 4vw, 2rem);
+      line-height: 1.2;
+      letter-spacing: -.04em;
+    }
+
+    .lead {
+      max-width: 590px;
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .pillar-intro {
+      margin-bottom: 30px;
+      color: var(--muted);
+    }
+
+    .progress-wrap {
+      padding: 0 clamp(24px, 6vw, 48px) 25px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: .83rem;
+    }
+
+    .progress-track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #eeeff5;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #766ce8, #a18cf4);
+      transition: width .35s ease;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
+      margin-top: 26px;
+    }
+
+    .field { display: grid; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field input::placeholder { color: #a4a8b8; }
+
+    .field input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(98, 88, 217, .1);
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .question {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fdfdff;
+    }
+
+    .question legend {
+      width: 100%;
+      padding: 0;
+      font-size: .98rem;
+      font-weight: 700;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 17px 0 9px;
+      color: var(--muted);
+      font-size: .75rem;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .scale-option { position: relative; }
+
+    .scale-option input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .scale-option span {
+      display: grid;
+      min-height: 46px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: #565b70;
+      cursor: pointer;
+      font-weight: 750;
+      transition: .18s ease;
+    }
+
+    .scale-option span:hover {
+      border-color: #b7b1f1;
+      background: #f8f7ff;
+    }
+
+    .scale-option input:checked + span {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 5px 15px rgba(98, 88, 217, .2);
+    }
+
+    .scale-option input:focus-visible + span {
+      outline: 3px solid rgba(98, 88, 217, .35);
+      outline-offset: 3px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 750;
+      transition: transform .18s, background .18s, border-color .18s;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { cursor: not-allowed; opacity: .55; transform: none; }
+
+    .button-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .button-primary:hover { background: var(--primary-dark); }
+
+    .button-secondary {
+      border-color: var(--line);
+      background: white;
+      color: var(--ink);
+    }
+
+    .button-secondary:hover { border-color: #c9c6ed; }
+
+    .button-quiet {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .error {
+      margin: 14px 0 0;
+      color: #ba3445;
+      font-size: .88rem;
+      font-weight: 650;
+    }
+
+    [hidden] { display: none !important; }
+
+    .pillars {
+      display: grid;
+      gap: 15px;
+      margin: 24px 0;
+    }
+
+    .result-card {
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .result-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .result-heading h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .result-score {
+      color: var(--primary);
+      font-size: 1.05rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .result-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #eeeff5;
+    }
+
+    .result-bar {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #766ce8, #a18cf4);
+    }
+
+    .result-description {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .summary-box {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 15px;
+      background: #f7f6ff;
+      color: #484467;
+      font-size: .92rem;
+    }
+
+    .summary-box strong { color: var(--ink); }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .toast {
+      min-height: 24px;
+      margin: 12px 0 0;
+      color: var(--green);
+      font-size: .88rem;
+      font-weight: 650;
+    }
+
+    .disclaimer {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .footer {
+      padding: 18px 10px 0;
+      color: var(--muted);
+      font-size: .8rem;
+      text-align: center;
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 20px, 760px); padding-top: 20px; }
+      .topbar { margin-bottom: 15px; }
+      .top-note { font-size: .75rem; text-align: right; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .question { padding: 16px; }
+      .actions .button { flex: 1; padding-inline: 12px; }
+      .result-actions .button { flex: 1 1 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">3S</span>
+        <span>Tu espacio de reflexión</span>
+      </div>
+      <span class="top-note">Saber · Sentir · Soñar</span>
+    </header>
+
+    <section class="card" aria-live="polite">
+      <div class="card-content">
+        <section id="intro-step">
+          <p class="eyebrow">Cuestionario de autoconocimiento</p>
+          <h1>Conecta con lo que sabes, sientes y sueñas.</h1>
+          <p class="lead">
+            Tómate unos minutos para reflexionar sobre tu presente y lo que quieres construir.
+            No hay respuestas correctas o incorrectas: responde con honestidad.
+          </p>
+
+          <p class="hint">Primero, cuéntanos un poco sobre ti. Tu nombre es el único dato obligatorio.</p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="user-name">Nombre <span aria-hidden="true">*</span></label>
+              <input id="user-name" name="name" autocomplete="name" placeholder="Tu nombre" required />
+            </div>
+            <div class="field">
+              <label for="user-email">Correo electrónico <span class="hint">(opcional)</span></label>
+              <input id="user-email" name="email" type="email" autocomplete="email" placeholder="tu@correo.com" />
+            </div>
+            <div class="field full">
+              <label for="user-role">Ocupación o rol <span class="hint">(opcional)</span></label>
+              <input id="user-role" name="role" placeholder="Por ejemplo: estudiante, profesional, emprendedor/a" />
+            </div>
+          </div>
+          <p id="intro-error" class="error" role="alert" hidden></p>
+          <div class="actions">
+            <span></span>
+            <button class="button button-primary" id="start-button" type="button">
+              Comenzar <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="quiz-step" hidden>
+          <div id="section-content"></div>
+          <p id="quiz-error" class="error" role="alert" hidden></p>
+          <div class="actions">
+            <button class="button button-secondary" id="back-button" type="button">
+              <span aria-hidden="true">←</span> Anterior
+            </button>
+            <button class="button button-primary" id="next-button" type="button">
+              Continuar <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="results-step" hidden>
+          <p class="eyebrow">Tu resumen</p>
+          <h2 id="results-title">Gracias por completar tu reflexión.</h2>
+          <p class="pillar-intro">
+            Estos resultados son una guía para ayudarte a identificar dónde podrías poner tu atención.
+          </p>
+          <div id="results-content"></div>
+          <p class="disclaimer">
+            Este cuestionario es una herramienta orientativa de reflexión personal; no es una prueba
+            diagnóstica ni reemplaza el acompañamiento de un profesional.
+          </p>
+          <div class="result-actions">
+            <button class="button button-primary" id="copy-button" type="button">Copiar resumen</button>
+            <button class="button button-secondary" id="download-button" type="button">Descargar resumen</button>
+            <button class="button button-quiet" id="restart-button" type="button">Empezar de nuevo</button>
+          </div>
+          <p id="toast" class="toast" role="status" aria-live="polite"></p>
+        </section>
+      </div>
+
+      <div class="progress-wrap" id="progress-wrap" hidden>
+        <div class="progress-meta">
+          <span id="progress-label">Progreso</span>
+          <span id="progress-count">0 de 9 respuestas</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Progreso del cuestionario"
+             aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" id="progressbar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">Una pausa para escucharte y mirar hacia adelante.</footer>
+  </main>
+
+  <script>
+    const sections = [
+      {
+        key: "saber",
+        title: "Saber",
+        subtitle: "Reconoce tus conocimientos, recursos y posibilidades actuales.",
+        questions: [
+          "Tengo claridad sobre mis fortalezas y habilidades.",
+          "Sé qué conocimientos necesito desarrollar para avanzar.",
+          "Comprendo cómo mis decisiones actuales influyen en mis objetivos."
+        ]
+      },
+      {
+        key: "sentir",
+        title: "Sentir",
+        subtitle: "Escucha tus emociones, motivaciones y necesidades.",
+        questions: [
+          "Puedo reconocer las emociones que influyen en mis decisiones.",
+          "Me siento conectado/a con las actividades que realizo cada día.",
+          "Me permito pedir apoyo cuando lo necesito."
+        ]
+      },
+      {
+        key: "sonar",
+        title: "Soñar",
+        subtitle: "Imagina el futuro que deseas y los pasos que pueden acercarte a él.",
+        questions: [
+          "Tengo una visión que me inspira para mi futuro.",
+          "Mis metas reflejan lo que realmente es importante para mí.",
+          "Estoy dando pasos concretos hacia la vida que quiero construir."
+        ]
+      }
+    ];
+
+    const scaleLabels = {
+      1: "Nada de acuerdo",
+      2: "Poco de acuerdo",
+      3: "Neutral",
+      4: "De acuerdo",
+      5: "Muy de acuerdo"
+    };
+
+    const totalQuestions = sections.reduce((sum, section) => sum + section.questions.length, 0);
+    const answers = {};
+    let currentSection = 0;
+    let generatedSummary = "";
+
+    const introStep = document.getElementById("intro-step");
+    const quizStep = document.getElementById("quiz-step");
+    const resultsStep = document.getElementById("results-step");
+    const progressWrap = document.getElementById("progress-wrap");
+    const sectionContent = document.getElementById("section-content");
+    const progressFill = document.getElementById("progress-fill");
+    const progressCount = document.getElementById("progress-count");
+    const progressbar = document.getElementById("progressbar");
+    const progressLabel = document.getElementById("progress-label");
+
+    function answeredCount() {
+      return Object.keys(answers).length;
+    }
+
+    function updateProgress() {
+      const count = answeredCount();
+      const percentage = Math.round((count / totalQuestions) * 100);
+      progressFill.style.width = percentage + "%";
+      progressCount.textContent = `${count} de ${totalQuestions} respuestas`;
+      progressbar.setAttribute("aria-valuenow", String(count));
+      progressLabel.textContent = `Etapa ${currentSection + 1} de ${sections.length}`;
+    }
+
+    function renderSection() {
+      const section = sections[currentSection];
+      const firstQuestionNumber = currentSection * section.questions.length + 1;
+
+      sectionContent.innerHTML = `
+        <p class="eyebrow">Pilar ${currentSection + 1} de ${sections.length}</p>
+        <h2 id="section-title">${section.title}</h2>
+        <p class="pillar-intro">${section.subtitle}</p>
+        <div class="question-list">
+          ${section.questions.map((question, index) => {
+            const questionId = `${section.key}-${index}`;
+            return `
+              <fieldset class="question">
+                <legend>${question}</legend>
+                <div class="scale-labels" aria-hidden="true">
+                  <span>Nada de acuerdo</span><span>Muy de acuerdo</span>
+                </div>
+                <div class="scale" role="radiogroup" aria-label="${question}">
+                  ${[1, 2, 3, 4, 5].map(value => `
+                    <label class="scale-option">
+                      <input type="radio" name="${questionId}" value="${value}"
+                        aria-label="${value}: ${scaleLabels[value]}"
+                        ${answers[questionId] === value ? "checked" : ""} />
+                      <span>${value}</span>
+                    </label>
+                  `).join("")}
+                </div>
+              </fieldset>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      document.getElementById("back-button").disabled = currentSection === 0;
+      document.getElementById("next-button").innerHTML =
+        currentSection === sections.length - 1
+          ? 'Ver mi resumen <span aria-hidden="true">→</span>'
+          : 'Continuar <span aria-hidden="true">→</span>';
+      document.getElementById("quiz-error").hidden = true;
+      updateProgress();
+    }
+
+    document.getElementById("start-button").addEventListener("click", () => {
+      const nameInput = document.getElementById("user-name");
+      const emailInput = document.getElementById("user-email");
+      const introError = document.getElementById("intro-error");
+
+      if (!nameInput.value.trim()) {
+        introError.textContent = "Escribe tu nombre para continuar.";
+        introError.hidden = false;
+        nameInput.focus();
+        return;
+      }
+
+      if (emailInput.value && !emailInput.checkValidity()) {
+        introError.textContent = "Revisa el formato del correo electrónico.";
+        introError.hidden = false;
+        emailInput.focus();
+        return;
+      }
+
+      introStep.hidden = true;
+      quizStep.hidden = false;
+      progressWrap.hidden = false;
+      currentSection = 0;
+      renderSection();
+      document.getElementById("section-title").focus?.();
+    });
+
+    sectionContent.addEventListener("change", event => {
+      if (event.target.matches('input[type="radio"]')) {
+        answers[event.target.name] = Number(event.target.value);
+        updateProgress();
+      }
+    });
+
+    document.getElementById("back-button").addEventListener("click", () => {
+      if (currentSection > 0) {
+        currentSection--;
+        renderSection();
+      }
+    });
+
+    document.getElementById("next-button").addEventListener("click", () => {
+      const section = sections[currentSection];
+      const missing = section.questions.some((_, index) => {
+        return !answers[`${section.key}-${index}`];
+      });
+
+      if (missing) {
+        const error = document.getElementById("quiz-error");
+        error.textContent = "Responde todas las preguntas de esta etapa para continuar.";
+        error.hidden = false;
+        return;
+      }
+
+      if (currentSection < sections.length - 1) {
+        currentSection++;
+        renderSection();
+        document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        showResults();
+      }
+    });
+
+    function scoreDescription(average) {
+      if (average >= 4.2) return "Este pilar aparece como una fortaleza en tus respuestas. Identifica cómo puedes seguir nutriéndolo.";
+      if (average >= 3.2) return "Hay una base en desarrollo. Una acción pequeña y constante puede ayudarte a fortalecer este aspecto.";
+      return "Podría ser un buen espacio para poner atención. Reflexiona sobre qué apoyo o primer paso te sería útil.";
+    }
+
+    function buildSummary() {
+      const name = document.getElementById("user-name").value.trim();
+      const email = document.getElementById("user-email").value.trim();
+      const role = document.getElementById("user-role").value.trim();
+
+      const lines = [
+        "RESUMEN DE REFLEXIÓN 3S",
+        `Nombre: ${name}`,
+        ...(role ? [`Ocupación o rol: ${role}`] : []),
+        ...(email ? [`Correo: ${email}`] : []),
+        "",
+        ...sections.map(section => {
+          const values = section.questions.map((_, index) => answers[`${section.key}-${index}`]);
+          const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+          return `${section.title}: ${average.toFixed(1)} / 5 — ${scoreDescription(average)}`;
+        }),
+        "",
+        "Escala: 1 = Nada de acuerdo · 5 = Muy de acuerdo",
+        "Nota: Resultado orientativo para reflexión personal; no es una evaluación diagnóstica."
+      ];
+
+      return lines.join("\n");
+    }
+
+    function showResults() {
+      generatedSummary = buildSummary();
+      const name = document.getElementById("user-name").value.trim();
+
+      quizStep.hidden = true;
+      resultsStep.hidden = false;
+      progressWrap.hidden = true;
+      document.getElementById("results-title").textContent = `Gracias, ${name}. Aquí está tu resumen.`;
+
+      const resultsContent = document.getElementById("results-content");
+      resultsContent.innerHTML = '<div class="pillars"></div><div class="summary-box"></div>';
+      const pillars = resultsContent.querySelector(".pillars");
+
+      sections.forEach(section => {
+        const values = section.questions.map((_, index) => answers[`${section.key}-${index}`]);
+        const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+        const percent = Math.round((average / 5) * 100);
+
+        const card = document.createElement("article");
+        card.className = "result-card";
+
+        const heading = document.createElement("div");
+        heading.className = "result-heading";
+
+        const title = document.createElement("h3");
+        title.textContent = section.title;
+
+        const score = document.createElement("span");
+        score.className = "result-score";
+        score.textContent = `${average.toFixed(1)} / 5`;
+
+        heading.append(title, score);
+
+        const track = document.createElement("div");
+        track.className = "result-track";
+        track.setAttribute("role", "img");
+        track.setAttribute("aria-label", `${section.title}: ${percent}%`);
+        const bar = document.createElement("div");
+        bar.className = "result-bar";
+        bar.style.width = `${percent}%`;
+        track.append(bar);
+
+        const description = document.createElement("p");
+        description.className = "result-description";
+        description.textContent = scoreDescription(average);
+
+        card.append(heading, track, description);
+        pillars.append(card);
+      });
+
+      resultsContent.querySelector(".summary-box").innerHTML =
+        "<strong>Una idea para llevar contigo:</strong> observa cuál de los tres pilares te gustaría atender primero y elige una acción concreta, pequeña y posible para esta semana.";
+
+      document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.getElementById("copy-button").addEventListener("click", async () => {
+      const toast = document.getElementById("toast");
+      try {
+        await navigator.clipboard.writeText(generatedSummary);
+        toast.textContent = "Resumen copiado al portapapeles.";
+      } catch {
+        const temp = document.createElement("textarea");
+        temp.value = generatedSummary;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.append(temp);
+        temp.select();
+        const copied = document.execCommand("copy");
+        temp.remove();
+        toast.textContent = copied
+          ? "Resumen copiado al portapapeles."
+          : "No se pudo copiar. Puedes descargar el resumen.";
+      }
+    });
+
+    document.getElementById("download-button").addEventListener("click", () => {
+      const blob = new Blob([generatedSummary], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "mi-resumen-3s.txt";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      document.getElementById("toast").textContent = "Tu resumen se ha descargado.";
+    });
+
+    document.getElementById("restart-button").addEventListener("click", () => {
+      Object.keys(answers).forEach(key => delete answers[key]);
+      currentSection = 0;
+      document.getElementById("toast").textContent = "";
+      document.getElementById("user-name").value = "";
+      document.getElementById("user-email").value = "";
+      document.getElementById("user-role").value = "";
+      resultsStep.hidden = true;
+      introStep.hidden = false;
+      progressWrap.hidden = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
